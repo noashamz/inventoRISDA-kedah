@@ -1,17 +1,85 @@
+<!DOCTYPE html>
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InventoRISDA v3.12</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 30px; background-color: #f0f2f5; margin: 0; }
+        .login-container { background: white; padding: 40px 20px; border-radius: 20px; display: inline-block; width: 90%; max-width: 400px; box-shadow: 0px 10px 25px rgba(0,0,0,0.1); margin-top: 50px; }
+        img { margin-bottom: 20px; filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); }
+        h2 { color: #333; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+        input { padding: 15px; width: 85%; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; font-size: 16px; outline: none; }
+        input:focus { border-color: #0056b3; box-shadow: 0 0 5px rgba(0,86,179,0.3); }
+        button { padding: 15px; width: 93%; background-color: #0056b3; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #004494; transform: translateY(-2px); }
+        #message { margin-top: 15px; font-size: 14px; font-weight: 500; min-height: 20px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="logo-risda.png" alt="Logo RISDA" width="120" onerror="this.src='https://via.placeholder.com/120?text=RISDA'">
+        <h2>InventoRISDA <small style="font-size: 12px; color: #0056b3;">v3.12</small></h2>
+        <p>Sila log masuk dengan emel rasmi untuk permohonan stok (Kedah).</p>
+        
+        <input type="email" id="emailInput" placeholder="nama@risda.gov.my">
+        <br>
+        <button onclick="checkEmail()">Log Masuk</button>
+        
+        <div id="message"></div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Pentadbiran RISDA Negeri Kedah
+    </div>
+
     <script>
+        // MASUKKAN 49 EMEL PEGAWAI DI SINI
+        const senaraiPegawai = [
+            "admin@risda.gov.my",
+            "pegawai1@risda.gov.my",
+            "user@gmail.com" // Untuk tujuan testing anda
+        ];
+
+        function checkEmail() {
+            const email = document.getElementById('emailInput').value.toLowerCase().trim();
+            const msg = document.getElementById('message');
+
+            if (email === "") {
+                msg.style.color = "orange";
+                msg.innerHTML = "Sila masukkan emel anda.";
+                return;
+            }
+
+            if (senaraiPegawai.includes(email)) {
+                msg.style.color = "green";
+                msg.innerHTML = "Akses Diterima! Membuka borang...";
+                
+                // GANTIKAN LINK GOOGLE FORM ANDA DI BAWAH
+                setTimeout(() => {
+                    window.location.href = "https://forms.gle/ContohBorangAnda"; 
+                }, 1500);
+            } else {
+                msg.style.color = "red";
+                msg.innerHTML = "Emel tidak berdaftar dalam sistem.";
+            }
+        }
+
+        // PENDAFTARAN SERVICE WORKER (UNTUK PWA)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js', { scope: './' })
-            .then(function(registration) {
-                console.log('Registration successful, scope is:', registration.scope);
-            })
-            .catch(function(error) {
-                console.log('Service worker registration failed, error:', error);
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('PWA v3.12 Aktif'))
+                .catch(err => console.error('PWA Gagal:', err));
             });
         }
     </script>
-</head>
+</body>
+</html>
