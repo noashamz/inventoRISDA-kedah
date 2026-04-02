@@ -1,62 +1,13 @@
-<!DOCTYPE html>
-<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InventoRISDA Kedah</title>
     <link rel="manifest" href="manifest.json">
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; }
-        .login-container { background: white; padding: 30px; border-radius: 15px; display: inline-block; shadow: 0px 4px 10px rgba(0,0,0,0.1); }
-        input { padding: 10px; width: 250px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px; }
-        button { padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #004494; }
-        #message { color: red; margin-top: 10px; font-size: 14px; }
-    </style>
-</head>
-<body>
-
-    <div class="login-container">
-        <img src="logo-risda.png" alt="Logo RISDA" width="100">
-        <h2>Selamat Datang ke InventoRISDA</h2>
-        <p>Sila masukkan emel rasmi untuk memohon stok.</p>
-        
-        <input type="email" id="emailInput" placeholder="contoh@risda.gov.my">
-        <br>
-        <button onclick="checkEmail()">Log Masuk</button>
-        
-        <p id="message"></p>
-    </div>
-
+    
     <script>
-        // DAFTAR 49 EMEL PEGAWAI DI SINI
-        const senaraiPegawai = [
-            "pegawai1@risda.gov.my",
-            "admin@risda.gov.my",
-            "user1@gmail.com" // Anda boleh tambah emel anda sendiri untuk test
-        ];
-
-        function checkEmail() {
-            const email = document.getElementById('emailInput').value;
-            const msg = document.getElementById('message');
-
-            if (senaraiPegawai.includes(email)) {
-                msg.style.color = "green";
-                msg.innerHTML = "Akses Diterima! Menghubungkan ke Borang...";
-                // Selepas berjaya, hantar mereka ke Google Form atau Page Permohonan
-                setTimeout(() => {
-                    window.location.href = "https://forms.gle/ContohBorangAnda"; 
-                }, 2000);
-            } else {
-                msg.style.color = "red";
-                msg.innerHTML = "Maaf, emel anda tidak berdaftar.";
-            }
-        }
-
-        // Daftar Service Worker untuk PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('v3.12 Berjaya Didaftar'))
+                .catch(err => console.log('Ralat PWA:', err));
+            });
         }
     </script>
-</body>
-</html>
+</head>
