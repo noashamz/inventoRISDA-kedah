@@ -142,61 +142,28 @@
     </div>
 
     <script>
-        // MASUKKAN 49 EMEL PEGAWAI DI SINI
+        // 1. SENARAI EMEL PEGAWAI DIBENARKAN
         const senaraiPegawai = [
-            "a.s.syahir@risda.gov.my",
-            "anuar.aziz@risda.gov.my",
-            "marliana@risda.gov.my",
-             "rodzi@risda.gov.my",
-             "hakim.yussoff@risda.gov.my",
-             "mohamad_fahmi@risda.gov.my",
-             "mohammad.fariq@risda.gov.my",
-             "noor_ajifuddin@risda.gov.my",
-             "husaini@risda.gov.my",
-             "mohd.aiman@risda.gov.my",
-             "mohd.alif@risda.gov.my",
-             "amirul.ashraf@risda.gov.my",
-             "mohd.anas@risda.gov.my",
-             "asyraf@risda.gov.my",
-             "m.basyiruddin@risda.gov.my",
-             "firdaous@risda.gov.my",
-             "mohd.hafis@risda.gov.my",
-             "najib.hamdi@risda.gov.my",
-             "mohd.nazif@risda.gov.my",
-             "mohdrosli@risda.gov.my",
-             "saiful_asyraf@risda.gov.my",
-             "sayuthi@risda.gov.my",
-             "shahril.shahrom@risda.gov.my",
-             "zaiful@risda.gov.my",
-             "mohd.zuhairi@risda.gov.my",
-             "najmuddin@risda.gov.my",
-             "afiq.abdulrahman@risda.gov.my",
-             "m.zulhilmi@risda.gov.my",
-             "nabila.hajar@risda.gov.my",
-             "n.azah@risda.gov.my",
-             "n.shazliza@risda.gov.my",
-             "nor.fahmiza@risda.gov.my",
-             "norhasmiza@risda.gov.my",
-             "nuraina@risda.gov.my",
-             "izzatie@risda.gov.my",
-             "fatini.shahidan@risda.gov.my",
-             "rohaida@risda.gov.my",
-             "rohaizam@risda.gov.my",
-             "romli@risda.gov.my",
-             "saerah@risda.gov.my",
-             "anwar@risda.gov.my",
-             "mudirah@risda.gov.my",
-             "syahid.adil@risda.gov.my",
-             "syahidah@risda.gov.my",
-             "taufik.zulkefli@risda.gov.my",
-             "wan.maslina@risda.gov.my",
-             "yusaini@risda.gov.my",
-             "yusmiza.dahlan@risda.gov.my",
-             "zolkifli@risda.gov.my",
-            "noashamz@gmail.com" // Untuk tujuan testing anda
+            "a.s.syahir@risda.gov.my", "anuar.aziz@risda.gov.my", "marliana@risda.gov.my",
+            "rodzi@risda.gov.my", "hakim.yussoff@risda.gov.my", "mohamad_fahmi@risda.gov.my",
+            "mohammad.fariq@risda.gov.my", "noor_ajifuddin@risda.gov.my", "husaini@risda.gov.my",
+            "mohd.aiman@risda.gov.my", "mohd.alif@risda.gov.my", "amirul.ashraf@risda.gov.my",
+            "mohd.anas@risda.gov.my", "asyraf@risda.gov.my", "m.basyiruddin@risda.gov.my",
+            "firdaous@risda.gov.my", "mohd.hafis@risda.gov.my", "najib.hamdi@risda.gov.my",
+            "mohd.nazif@risda.gov.my", "mohdrosli@risda.gov.my", "saiful_asyraf@risda.gov.my",
+            "sayuthi@risda.gov.my", "shahril.shahrom@risda.gov.my", "zaiful@risda.gov.my",
+            "mohd.zuhairi@risda.gov.my", "najmuddin@risda.gov.my", "afiq.abdulrahman@risda.gov.my",
+            "m.zulhilmi@risda.gov.my", "nabila.hajar@risda.gov.my", "n.azah@risda.gov.my",
+            "n.shazliza@risda.gov.my", "nor.fahmiza@risda.gov.my", "norhasmiza@risda.gov.my",
+            "nuraina@risda.gov.my", "izzatie@risda.gov.my", "fatini.shahidan@risda.gov.my",
+            "rohaida@risda.gov.my", "rohaizam@risda.gov.my", "romli@risda.gov.my",
+            "saerah@risda.gov.my", "anwar@risda.gov.my", "mudirah@risda.gov.my",
+            "syahid.adil@risda.gov.my", "syahidah@risda.gov.my", "taufik.zulkefli@risda.gov.my",
+            "wan.maslina@risda.gov.my", "yusaini@risda.gov.my", "yusmiza.dahlan@risda.gov.my",
+            "zolkifli@risda.gov.my", "noashamz@gmail.com"
         ];
 
-        // 2. URL SISTEM (GOOGLE APPS SCRIPT) - DIKEMASKINI
+        // 2. URL SISTEM (GOOGLE APPS SCRIPT) - DISIKRONKAN
         const URL_SISTEM = "https://script.google.com/macros/s/AKfycbyVMycZHbZ2BernA_FTIflixOKpAhpXgMmUqqdbaXU8epW08YF9RBhdcObLTAcQ0IJO/exec";
 
         // 3. FUNGSI LOG MASUK
@@ -209,14 +176,13 @@
                 return;
             }
 
-            // Semak jika emel ada dalam whitelist
             if (senaraiPegawai.includes(email)) {
                 paparMesej("Akses Diterima! Membuka sistem...", "green");
                 
-                // Simpan emel dalam memori telefon (Remember Me)
+                // Simpan emel untuk sesi akan datang
                 localStorage.setItem("inventorisda_email", email);
 
-                // Redirect ke Google Apps Script selepas 1.2 saat
+                // Hala tuju ke URL Google Apps Script
                 setTimeout(() => {
                     window.location.href = URL_SISTEM;
                 }, 1200);
@@ -231,7 +197,6 @@
             msg.style.color = (warna === "green") ? "#28a745" : (warna === "red") ? "#dc3545" : "#fd7e14";
         }
 
-        // 4. AUTO-FILL JIKA PERNAH LOG MASUK
         window.onload = () => {
             const savedEmail = localStorage.getItem("inventorisda_email");
             if (savedEmail) {
@@ -239,7 +204,7 @@
             }
         };
 
-        // 5. PENDAFTARAN PWA (SERVICE WORKER)
+        // 5. PENDAFTARAN SERVICE WORKER (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
