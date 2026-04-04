@@ -125,7 +125,7 @@
     <div class="login-card">
         <img src="logo-risda.png" alt="RISDA" class="logo-img" onerror="this.src='https://via.placeholder.com/120?text=RISDA'">
         
-        <h2>InventoRISDA <span class="version-badge">v3.12</span></h2>
+        <h2>InventoRISDA <span class="version-badge">v3.22</span></h2>
         <p class="subtitle">Sistem Pengurusan Inventori Alat Tulis <br><strong>RISDA Kedah</strong></p>
 
         <div class="input-group">
@@ -163,7 +163,7 @@
             "zolkifli@risda.gov.my", "noashamz@gmail.com"
         ];
 
-        // 2. URL SISTEM (GOOGLE APPS SCRIPT) - DISIKRONKAN
+        // 2. URL SISTEM (GOOGLE APPS SCRIPT)
         const URL_SISTEM = "https://script.google.com/macros/s/AKfycbyVMycZHbZ2BernA_FTIflixOKpAhpXgMmUqqdbaXU8epW08YF9RBhdcObLTAcQ0IJO/exec";
 
         // 3. FUNGSI LOG MASUK
@@ -178,11 +178,7 @@
 
             if (senaraiPegawai.includes(email)) {
                 paparMesej("Akses Diterima! Membuka sistem...", "green");
-                
-                // Simpan emel untuk sesi akan datang
                 localStorage.setItem("inventorisda_email", email);
-
-                // Hala tuju ke URL Google Apps Script
                 setTimeout(() => {
                     window.location.href = URL_SISTEM;
                 }, 1200);
@@ -204,11 +200,11 @@
             }
         };
 
-        // 5. PENDAFTARAN SERVICE WORKER (PWA)
+        // 5. PENDAFTARAN SERVICE WORKER (PWA v3.22)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('PWA v3.12 Ready'))
+                .then(reg => console.log('PWA v3.22 Ready'))
                 .catch(err => console.log('PWA Error', err));
             });
         }
