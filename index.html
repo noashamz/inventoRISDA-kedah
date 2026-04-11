@@ -1,73 +1,29 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InventoRISDA v3.22 | RISDA Kedah</title>
     <style>
-        /* (Gunakan CSS responsif yang saya berikan sebelum ini) */
-        :root { --primary-color: #006837; --bg-gradient: linear-gradient(135deg, #e9ecef 0%, #cbd3da 100%); }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-gradient); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 40px; border-radius: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); width: 85%; max-width: 400px; text-align: center; }
-        .logo-img { width: 110px; margin-bottom: 20px; }
-        input { width: 100%; padding: 18px; border: 2px solid #dfe6e9; border-radius: 16px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
-        button { width: 100%; padding: 18px; background: #006837; color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: bold; cursor: pointer; }
+        /* Memastikan iframe memenuhi seluruh skrin tanpa margin */
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #f4f7f6; }
+        iframe { border: none; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <img src="https://i.ibb.co/3yrQJvX0/logo-risda-gold-emboss-removebg-preview.png" alt="RISDA" class="logo-img">
-        <h2 style="margin:0;">InventoRISDA <span style="font-size:12px; background:#006837; color:white; padding:2px 8px; border-radius:10px;">v3.22</span></h2>
-        <p style="color:#636e72; margin: 10px 0 30px;">Sistem Inventori Alat Tulis RISDA Kedah</p>
-
-        <input type="email" id="emailInput" placeholder="Emel Rasmi (@risda.gov.my)" inputmode="email">
-        <button id="loginBtn" onclick="prosesLogin()">Log Masuk</button>
-        <div id="message" style="margin-top:20px; font-size:14px; font-weight:500;">Menyambung ke database...</div>
-    </div>
+    <iframe src="https://script.google.com/a/macros/risda.gov.my/s/AKfycbyetorELLyy_8C2cGJaRpp-WOCcbCZoGlZ4MUjWVSsmIrMsvjeV_Sv6xFJd7u4KUkze/exec" 
+            allow="geolocation; microphone; camera">
+    </iframe>
 
     <script>
-        let senaraiPegawai = [];
-        // GANTIKAN DENGAN URL WEB APP GAS ANDA SETELAH DEPLOY ULANG
-        const URL_SISTEM = "https://script.google.com/macros/s/AKfycbyetorELLyy_8C2cGJaRpp-WOCcbCZoGlZ4MUjWVSsmIrMsvjeV_Sv6xFJd7u4KUkze/exec";
-
-        async function muatTurunDatabase() {
-            try {
-                const response = await fetch(URL_SISTEM + "?action=getStaffList");
-                senaraiPegawai = await response.json();
-                document.getElementById('message').innerText = "Sistem sedia.";
-                document.getElementById('message').style.color = "green";
-            } catch (e) {
-                document.getElementById('message').innerText = "Ralat Database. Sila muat semula laman.";
-                document.getElementById('message').style.color = "red";
+        // Logik tambahan untuk membuang memori ralat jika pengguna kembali melalui pautan refresh
+        window.onload = function() {
+            if (window.location.search.includes('refresh')) {
+                // Memberitahu iframe untuk memuat semula secara bersih
+                var iframe = document.getElementsByTagName('iframe')[0];
+                iframe.src = iframe.src; 
             }
-        }
-
-        function prosesLogin() {
-            const email = document.getElementById('emailInput').value.toLowerCase().trim();
-            if (!email) return;
-
-            if (senaraiPegawai.includes(email)) {
-                document.getElementById('loginBtn').disabled = true;
-                document.getElementById('loginBtn').innerText = "Membuka sistem...";
-                localStorage.setItem("inventorisda_email", email);
-                window.location.href = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
-            } else {
-                document.getElementById('message').innerText = "Emel tidak berdaftar dalam Google Sheet.";
-                document.getElementById('message').style.color = "red";
-            }
-        }
-
-        window.onload = () => {
-    muatTurunDatabase();
-    // Jika URL mengandungi arahan refresh, kita cuci localStorage
-    if (window.location.search.includes('refresh')) {
-        localStorage.removeItem("inventorisda_email");
-        document.getElementById('emailInput').value = "";
-    } else {
-        const savedEmail = localStorage.getItem("inventorisda_email");
-        if (savedEmail) document.getElementById('emailInput').value = savedEmail;
-    }
-};
+        };
     </script>
 </body>
 </html>
