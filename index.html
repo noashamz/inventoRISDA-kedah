@@ -7,33 +7,90 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#006837">
     
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #f4f7f6; }
-        iframe { border: none; width: 100%; height: 100%; }
+        :root { --primary-color: #006837; --bg-gradient: linear-gradient(135deg, #e9ecef 0%, #cbd3da 100%); }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: var(--bg-gradient); overflow: hidden; }
+        
+        /* GAYA GERBANG LOG MASUK */
+        #loginContainer { display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%; position: absolute; z-index: 10; background: var(--bg-gradient); transition: opacity 0.5s ease; }
+        .login-card { background: white; padding: 40px; border-radius: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); width: 85%; max-width: 400px; text-align: center; }
+        .logo-img { width: 110px; margin-bottom: 20px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
+        input { width: 100%; padding: 18px; border: 2px solid #dfe6e9; border-radius: 16px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; text-align: center; font-weight: bold; }
+        input:focus { border-color: var(--primary-color); outline: none; }
+        button { width: 100%; padding: 18px; background: #006837; color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,104,55,0.3); }
+        button:hover { background: #004d29; transform: translateY(-2px); }
+        
+        /* GAYA IFRAME (Asalnya tersembunyi) */
+        #appFrame { border: none; width: 100%; height: 100%; display: none; position: absolute; top: 0; left: 0; z-index: 5; }
     </style>
 </head>
 <body>
-    <iframe src="https://script.google.com/a/macros/risda.gov.my/s/AKfycbyetorELLyy_8C2cGJaRpp-WOCcbCZoGlZ4MUjWVSsmIrMsvjeV_Sv6xFJd7u4KUkze/exec" 
-            allow="geolocation; microphone; camera">
-    </iframe>
+
+    <div id="loginContainer">
+        <div class="login-card">
+            <img src="https://i.ibb.co/3yrQJvX0/logo-risda-gold-emboss-removebg-preview.png" alt="RISDA" class="logo-img">
+            <h2 style="margin:0; color:#333;">InventoRISDA <span style="font-size:12px; background:#006837; color:white; padding:2px 8px; border-radius:10px; vertical-align: middle;">v3.22</span></h2>
+            <p style="color:#636e72; margin: 10px 0 30px; font-size: 14px;">Sistem Inventori Alat Tulis RISDA Kedah</p>
+
+            <input type="email" id="emailInput" placeholder="Emel @risda.gov.my" inputmode="email">
+            <button id="loginBtn" onclick="masukSistem()">Log Masuk</button>
+            <div id="message" style="margin-top:20px; font-size:14px; font-weight:500; color:#666;">Sila masukkan emel anda.</div>
+        </div>
+    </div>
+
+    <iframe id="appFrame" allow="geolocation; microphone; camera"></iframe>
 
     <script>
-        // Cuci memori jika pengguna kembali selepas ralat
-        window.onload = function() {
+        // URL WEB APP GAS ANDA
+        const URL_SISTEM = "https://script.google.com/macros/s/AKfycbyetorELLyy_8C2cGJaRpp-WOCcbCZoGlZ4MUjWVSsmIrMsvjeV_Sv6xFJd7u4KUkze/exec";
+
+        window.onload = () => {
+            // Logik cuci memori jika kembali dari ralat
             if (window.location.search.includes('refresh')) {
-                var iframe = document.getElementsByTagName('iframe')[0];
-                iframe.src = iframe.src; 
+                localStorage.removeItem("inventorisda_email");
+                document.getElementById('emailInput').value = "";
+                // Buang '?refresh=' dari URL supaya nampak bersih
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                const savedEmail = localStorage.getItem("inventorisda_email");
+                if (savedEmail) document.getElementById('emailInput').value = savedEmail;
+            }
+
+            // Aktifkan PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA Error: ', err));
             }
         };
 
-        // Aktifkan Service Worker (PWA)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(function() { console.log('Aplikasi InventoRISDA sedia untuk di-install!'); })
-            .catch(function(err) { console.log('PWA Error: ', err); });
+        function masukSistem() {
+            const email = document.getElementById('emailInput').value.toLowerCase().trim();
+            if (!email) {
+                document.getElementById('message').innerText = "Sila masukkan emel!";
+                document.getElementById('message').style.color = "red";
+                return;
+            }
+
+            // Simpan emel dalam memori telefon
+            localStorage.setItem("inventorisda_email", email);
+
+            // Ubah butang kepada status memuatkan
+            document.getElementById('loginBtn').innerText = "Membuka sistem...";
+            document.getElementById('loginBtn').disabled = true;
+            
+            // Animasi: Pudarkan skrin log masuk, kemudian tunjukkan Iframe
+            setTimeout(() => {
+                document.getElementById('loginContainer').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    let frame = document.getElementById('appFrame');
+                    frame.style.display = 'block';
+                    
+                    // Tembak URL dengan identiti emel ke dalam Iframe
+                    frame.src = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
+                }, 500);
+            }, 500);
         }
     </script>
 </body>
