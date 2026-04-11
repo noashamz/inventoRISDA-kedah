@@ -79,18 +79,13 @@
             document.getElementById('loginBtn').innerText = "Membuka sistem...";
             document.getElementById('loginBtn').disabled = true;
             
-            // Animasi: Pudarkan skrin log masuk, kemudian tunjukkan Iframe
-            setTimeout(() => {
-                document.getElementById('loginContainer').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loginContainer').style.display = 'none';
-                    let frame = document.getElementById('appFrame');
-                    frame.style.display = 'block';
-                    
-                    // Tembak URL dengan identiti emel ke dalam Iframe
-                    frame.src = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
-                }, 500);
-            }, 500);
+            // TIADA LAGI ANIMASI LENGAN: Terus tukar paparan serta merta!
+            document.getElementById('loginContainer').style.display = 'none';
+            let frame = document.getElementById('appFrame');
+            frame.style.display = 'block';
+            
+            // Tembak URL dengan identiti emel ke dalam Iframe
+            frame.src = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
         }
     </script>
 </body>
