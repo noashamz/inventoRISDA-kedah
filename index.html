@@ -58,10 +58,16 @@
         }
 
         window.onload = () => {
-            muatTurunDatabase();
-            const savedEmail = localStorage.getItem("inventorisda_email");
-            if (savedEmail) document.getElementById('emailInput').value = savedEmail;
-        };
+    muatTurunDatabase();
+    // Jika URL mengandungi arahan refresh, kita cuci localStorage
+    if (window.location.search.includes('refresh')) {
+        localStorage.removeItem("inventorisda_email");
+        document.getElementById('emailInput').value = "";
+    } else {
+        const savedEmail = localStorage.getItem("inventorisda_email");
+        if (savedEmail) document.getElementById('emailInput').value = savedEmail;
+    }
+};
     </script>
 </body>
 </html>
