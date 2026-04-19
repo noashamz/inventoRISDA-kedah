@@ -125,8 +125,7 @@
             btn.disabled = true;
             
             // 🟢 LOGIK BAHARU (DIRECT REDIRECT)
-            // Sistem tidak lagi menggunakan iframe. Ia akan terus membawa pengguna
-            // ke aplikasi web Google yang sebenar untuk elak masalah sekatan telefon.
+            // KITA BUANG TERUS IFRAME. Bawa pengguna terus ke server Google
             window.location.href = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
         };
         }
