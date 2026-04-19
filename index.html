@@ -111,28 +111,24 @@
             const emailInput = document.getElementById('emailInput');
             const email = emailInput.value.toLowerCase().trim();
             const btn = document.getElementById('loginBtn');
-            const frame = document.getElementById('appFrame');
 
             // Validasi asas
             if (!email || !email.includes('@')) {
                 return alert("Sila masukkan emel yang sah!");
             }
 
-            // Simpan emel
+            // Simpan emel dalam memori telefon
             localStorage.setItem("inventorisda_email", email);
 
             // Tukar rupa butang
-            btn.innerText = "Menyemak Identiti...";
+            btn.innerText = "Membawa anda masuk...";
             btn.disabled = true;
             
-            // Set sumber iframe (iframe masih display: none)
-            frame.src = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
-            
-            // Hanya tukar skrin bila iframe dah sedia
-            frame.onload = function() {
-                document.getElementById('loginContainer').style.display = 'none';
-                frame.style.display = 'block';
-            };
+            // 🟢 LOGIK BAHARU (DIRECT REDIRECT)
+            // Sistem tidak lagi menggunakan iframe. Ia akan terus membawa pengguna
+            // ke aplikasi web Google yang sebenar untuk elak masalah sekatan telefon.
+            window.location.href = URL_SISTEM + "?userEmail=" + encodeURIComponent(email);
+        };
         }
     </script>
 </body>
