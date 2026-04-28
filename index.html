@@ -299,61 +299,62 @@
             }
         };
 
-        function prosesLogin() {
+        // FORENSIK: Fungsi prosesLogin kini menggunakan async/await untuk API
+        async function prosesLogin() {
             const email = document.getElementById('emailInput').value.toLowerCase().trim();
             
+            // FORENSIK: Ini adalah URL "Jambatan" GAS tuan
+            const gasApiUrl = "https://script.google.com/macros/s/AKfycbzE9EmyrfOxiYloLke70B91d2Xp0wzeVdCcv1sl5IQ-jIJ7jreeQTH-qAZm3XieGjOZhw/exec";
+
             if (!email.includes('@')) {
                 Swal.fire({ icon: 'error', title: 'Ralat', text: 'Sila masukkan emel yang sah.', background: '#0a0f0d', color: '#fff' });
                 return;
             }
 
-            localStorage.setItem("risdaPortalEmail", email);
-            playFuturisticSuccess();
-            tunjukDashboard(email);
-        }
-
-        function tunjukDashboard(email) {
-            document.getElementById('displayEmail').innerText = email;
-            
-            const loginSec = document.getElementById('login-section');
-            const dashSec = document.getElementById('dashboard-section');
-
-            loginSec.style.opacity = '0';
-            setTimeout(() => {
-                loginSec.style.display = 'none';
-                dashSec.style.display = 'flex';
-                void dashSec.offsetWidth;
-                dashSec.style.opacity = '1';
-            }, 500); 
-        }
-
-        function prosesLogout() {
+            // Papar skrin 'Loading' eksklusif sementara menunggu pengesahan pelayan
             Swal.fire({
-                title: 'Log Keluar Portal?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#333',
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Batal', // PEMBETULAN: Menukar teks lalai "Cancel" kepada "Batal"
-                background: '#0a0f0d', color: '#fff'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem("risdaPortalEmail");
-                    document.getElementById('emailInput').value = '';
-                    
-                    const loginSec = document.getElementById('login-section');
-                    const dashSec = document.getElementById('dashboard-section');
-
-                    dashSec.style.opacity = '0';
-                    setTimeout(() => {
-                        dashSec.style.display = 'none';
-                        loginSec.style.display = 'flex';
-                        void loginSec.offsetWidth;
-                        loginSec.style.opacity = '1';
-                    }, 500);
-                }
+                title: 'MENGESAHKAN IDENTITI...',
+                html: 'Sila tunggu, sistem sedang menyemak pangkalan data pusat.',
+                background: '#0a0f0d',
+                color: '#fff',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
             });
+
+            try {
+                // Mengetuk pintu Google Apps Script
+                const response = await fetch(`${gasApiUrl}?email=${email}`);
+                const result = await response.json();
+
+                // Tutup skrin 'Loading'
+                Swal.close();
+
+                if (result.status === "Sah") {
+                    // JIKA SAH: Masuk ke Dashboard
+                    localStorage.setItem("risdaPortalEmail", email);
+                    playFuturisticSuccess();
+                    tunjukDashboard(email);
+                } else {
+                    // JIKA GAGAL: Halang dan tunjuk amaran
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: '🛑 AKSES DISEKAT', 
+                        text: 'Maaf, e-mel anda tidak wujud dalam senarai kakitangan rasmi. Sila hubungi Admin IT.', 
+                        background: '#0a0f0d', 
+                        color: '#fff',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({ 
+                    icon: 'warning', 
+                    title: 'Ralat Rangkaian', 
+                    text: 'Sistem gagal berhubung dengan pelayan pengesahan. Sila cuba lagi sebentar lagi.',
+                    background: '#0a0f0d', 
+                    color: '#fff' 
+                });
+            }
         }
 
         function playFuturisticSuccess() {
