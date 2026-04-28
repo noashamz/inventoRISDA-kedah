@@ -46,32 +46,25 @@
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* Cari bahagian CSS ini dalam index.html */
-.login-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(198, 163, 85, 0.3);
-    border-radius: 20px;
-    padding: 50px 40px;
-    text-align: center;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 40px rgba(0, 104, 55, 0.4);
-    width: 100%;
-    max-width: 450px;
-    
-    /* === TAMBAH BARIS INI UNTUK KESAN 3D === */
-    perspective: 1000px;
-}
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(198, 163, 85, 0.3);
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 40px rgba(0, 104, 55, 0.4);
+            width: 100%;
+            max-width: 450px;
+            perspective: 1000px;
+        }
 
-        /* Cari bahagian CSS ini dalam index.html */
-.login-logo {
-    width: 110px;
-    margin-bottom: 20px;
-    /* Glow dibuang sepenuhnya untuk rupa yang lebih solid & bersih */
-    
-    /* === TAMBAH BARIS-BARIS INI UNTUK ANIMASI === */
-    animation: putarY3D 6s linear infinite; /* Pusingan 3D pada paksi Y, tak terhingga */
-    transform-style: preserve-3d;     /* Pastikan logo dipaparkan dalam ruang 3D */
-}
+        .login-logo {
+            width: 110px;
+            margin-bottom: 20px;
+            animation: putarY3D 6s linear infinite; 
+            transform-style: preserve-3d;     
+        }
 
         .login-card h2 {
             font-family: 'Orbitron', sans-serif;
@@ -133,7 +126,7 @@
         }
 
         .portal-header {
-            padding: 20px 30px; /* Padding dikurangkan sedikit untuk header yang kemas */
+            padding: 20px 30px; 
             border-bottom: 2px solid var(--risda-gold);
             background: rgba(0, 104, 55, 0.2);
             backdrop-filter: blur(10px);
@@ -142,15 +135,12 @@
             align-items: center;
         }
 
-        /* SUSUNAN BARU: Bahagian Kiri (Logo RISDA + Tajuk) */
         .header-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .header-logo-risda {
-            height: 45px;
-        }
+        .header-logo-risda { height: 45px; }
         .header-titles h1 {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.6rem;
@@ -159,7 +149,6 @@
             margin: 0; letter-spacing: 2px;
         }
 
-        /* SUSUNAN BARU: Bahagian Kanan (Info Pengguna + Butang + Logo HPC) */
         .header-right {
             display: flex;
             align-items: center;
@@ -172,13 +161,10 @@
             padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s;
         }
         .btn-logout:hover { background: #dc3545; color: white; }
-        .header-logo-hpc {
-            height: 38px;
-        }
+        .header-logo-hpc { height: 38px; }
 
         .dashboard-content { flex: 1; padding: 50px 20px; }
 
-        /* Kad Aplikasi */
         .app-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(198, 163, 85, 0.2);
@@ -204,7 +190,6 @@
         .app-title { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: white; margin-bottom: 10px; }
         .app-desc { font-size: 0.95rem; color: #aaa; line-height: 1.5; }
 
-        /* Footer */
         footer { text-align: center; padding: 15px; background: rgba(0,0,0,0.6); color: #666; font-size: 0.85rem; }
         
         @media (max-width: 768px) {
@@ -213,16 +198,10 @@
             .header-right { flex-direction: column-reverse; gap: 15px; }
         }
 
-        /* === TAMBAH TAKRIFAN ANIMASI INI === */
-@keyframes putarY3D {
-    0% {
-        transform: rotateY(0deg); /* Kedudukan asal */
-    }
-    100% {
-        transform: rotateY(360deg); /* Pusingan lengkap 360 darjah */
-    }
-}
-        
+        @keyframes putarY3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -310,8 +289,6 @@
     </footer>
 
     <script>
-        // --- LOGIK PEMBEDAHAN PLASTIK (FRONTEND AUTHENTICATION) ---
-        
         window.onload = function() {
             const savedEmail = localStorage.getItem("risdaPortalEmail");
             if (savedEmail) {
@@ -320,7 +297,7 @@
         };
 
         // ========================================================
-        // 1. SENARAI E-MEL KAKITANGAN RASMI (49 ORANG)
+        // 1. SENARAI E-MEL KAKITANGAN RASMI (49 ORANG HARDCODED)
         // ========================================================
         const senaraiStafSah = [
             "mohdrosli@risda.gov.my", "syahidah@risda.gov.my", "sayuthi@risda.gov.my", 
@@ -350,45 +327,78 @@
 
             if (!email.includes('@')) {
                 Swal.fire({ 
-                    icon: 'error', 
-                    title: 'Format Ralat', 
-                    text: 'Sila masukkan alamat emel yang sah.', 
-                    background: '#0a0f0d', 
-                    color: '#fff' 
+                    icon: 'error', title: 'Format Ralat', text: 'Sila masukkan alamat emel yang sah.', 
+                    background: '#0a0f0d', color: '#fff' 
                 });
                 return;
             }
 
-            // Kesan Loading Futuristik (Hanya untuk gaya)
             Swal.fire({
                 title: 'MENGESAHKAN IDENTITI...',
                 html: 'Sila tunggu, sistem sedang menyemak pangkalan data.',
-                background: '#0a0f0d', 
-                color: '#fff',
+                background: '#0a0f0d', color: '#fff',
                 allowOutsideClick: false,
-                timer: 600, // Sangat pantas (0.6 saat)
+                timer: 600, 
                 didOpen: () => { Swal.showLoading(); }
             }).then(() => {
                 
-                // SEMAKAN INSTANT: Tiada ralat rangkaian akan berlaku di sini
                 if (senaraiStafSah.includes(email)) {
                     localStorage.setItem("risdaPortalEmail", email);
-                    playFuturisticSuccess(); // Bunyi Berjaya
-                    tunjukDashboard(email);  // Papar Dashboard
+                    playFuturisticSuccess(); 
+                    tunjukDashboard(email);  
                 } else {
                     Swal.fire({ 
-                        icon: 'error', 
-                        title: '🛑 AKSES DISEKAT', 
+                        icon: 'error', title: '🛑 AKSES DISEKAT', 
                         text: 'Maaf, emel anda tidak berdaftar untuk akses Portal Kedah Di Hatiku.', 
-                        background: '#0a0f0d', 
-                        color: '#fff', 
-                        confirmButtonColor: '#dc3545'
+                        background: '#0a0f0d', color: '#fff', confirmButtonColor: '#dc3545'
                     });
                 }
             });
         }
 
-        
+        function tunjukDashboard(email) {
+            document.getElementById('displayEmail').innerText = email;
+            const loginSec = document.getElementById('login-section');
+            const dashSec = document.getElementById('dashboard-section');
+
+            loginSec.style.opacity = '0';
+            setTimeout(() => {
+                loginSec.style.display = 'none';
+                dashSec.style.display = 'flex';
+                void dashSec.offsetWidth;
+                dashSec.style.opacity = '1';
+            }, 500); 
+        }
+
+        function prosesLogout() {
+            Swal.fire({
+                title: 'Log Keluar Portal?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#333',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal',
+                background: '#0a0f0d', color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem("risdaPortalEmail");
+                    document.getElementById('emailInput').value = '';
+                    
+                    const loginSec = document.getElementById('login-section');
+                    const dashSec = document.getElementById('dashboard-section');
+
+                    dashSec.style.opacity = '0';
+                    setTimeout(() => {
+                        dashSec.style.display = 'none';
+                        loginSec.style.display = 'flex';
+                        void loginSec.offsetWidth;
+                        loginSec.style.opacity = '1';
+                    }, 500);
+                }
+            });
+        }
+
         function playFuturisticSuccess() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -406,36 +416,16 @@
             } catch (e) {}
         }
         
-        // 1. Matikan fungsi Klik Kanan (Context Menu)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
-        // 2. Matikan butang F12 dan kombinasi Keyboard (Inspect Element / View Source)
         document.onkeydown = function(e) {
-            // Matikan butang F12
-            if (e.keyCode == 123) {
-                return false;
-            }
-            // Matikan Ctrl+Shift+I (Buka Developer Tools)
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                return false;
-            }
-            // Matikan Ctrl+Shift+C (Inspect Element Mode)
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-                return false;
-            }
-            // Matikan Ctrl+Shift+J (Buka Console)
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                return false;
-            }
-            // Matikan Ctrl+U (View Page Source)
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                return false;
-            }
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         };
 
-        // 3. Pesanan "Menakutkan" di Developer Console (Jika mereka berjaya masuk juga)
         console.log("%c🛑 AMARAN KESELAMATAN!", "color: red; font-size: 40px; font-weight: bold; text-shadow: 1px 1px 5px black;");
         console.log("%cRuangan ini adalah kawasan larangan. Sebarang percubaan memanipulasi kod sistem ini sedang direkodkan oleh pelayan Pusat.", "color: #c6a355; font-size: 16px; font-family: monospace;");
         
